@@ -73,7 +73,7 @@ const TalentDashboard = () => {
             My Tasks
             <span className="count-badge">{myTasks.length}</span>
           </h2>
-          <MyTasksList tasks={myTasks} />
+          <MyTasksList tasks={myTasks} onRefresh={handleClaimed} />
         </section>
       </main>
     </div>
