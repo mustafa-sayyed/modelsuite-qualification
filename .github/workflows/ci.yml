@@ -157,7 +157,7 @@ jobs:
     name: on-failure
     runs-on: ubuntu-latest
     needs: [test-client, test-server, danger]
-    if: ${{ always() && (needs.danger.result != 'success' || needs['test-client'].result != 'success' || needs['test-server'].result != 'success') }}
+    if: ${{ always() && (needs.danger.result == 'failure' || needs.danger.result == 'cancelled' || needs['test-client'].result == 'failure' || needs['test-client'].result == 'cancelled' || needs['test-server'].result == 'failure' || needs['test-server'].result == 'cancelled') }}
     permissions:
       pull-requests: write
       issues: write
@@ -168,9 +168,9 @@ jobs:
         run: |
           set -euo pipefail
           failures=""
-          if [ "${{ needs.danger.result }}" != "success" ]; then failures+="- danger: Danger checks failed\n"; fi
-          if [ "${{ needs['test-client'].result }}" != "success" ]; then failures+="- test-client: client lint/build failed\n"; fi
-          if [ "${{ needs['test-server'].result }}" != "success" ]; then failures+="- test-server: server lint/build failed\n"; fi
+          if [ "${{ needs.danger.result }}" = "failure" ] || [ "${{ needs.danger.result }}" = "cancelled" ]; then failures+="- danger: Danger checks failed\n"; fi
+          if [ "${{ needs['test-client'].result }}" = "failure" ] || [ "${{ needs['test-client'].result }}" = "cancelled" ]; then failures+="- test-client: client lint/build failed\n"; fi
+          if [ "${{ needs['test-server'].result }}" = "failure" ] || [ "${{ needs['test-server'].result }}" = "cancelled" ]; then failures+="- test-server: server lint/build failed\n"; fi
           echo "failures<<EOF" >> $GITHUB_OUTPUT
           echo -e "$failures" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
