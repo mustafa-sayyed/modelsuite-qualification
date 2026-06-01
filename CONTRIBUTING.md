@@ -32,8 +32,9 @@ When you are ready to submit your work:
 4. **PR Template**: Fill out the provided PR template thoroughly. This includes:
    - A brief summary of your changes.
    - Checking off the pre-flight checklists (local linting, builds, etc.).
-   - Noting files touched and any relevant testing instructions.
-   *Incomplete templates may result in your PR being closed.*
+   - A Voice recorded video of the overall changes and demonstration of your work.
+   - Any other information you think is relevant for PR reviewers.
+
 
 ## 5. CI/CD Pipeline & Checks
 We have an automated CI/CD pipeline that runs on every PR against `master`. It performs:
