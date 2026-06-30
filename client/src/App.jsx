@@ -6,6 +6,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import SubmissionsPage from './pages/admin/SubmissionsPage';
 import TalentDashboard from './pages/talent/TalentDashboard';
 import NotFoundPage from './pages/NotFoundPage';
+import { Toaster } from 'react-hot-toast';
 // "Unauthorized" message — confusing UX for the user
 const PrivateRoute = ({ children, role }) => {
   const { user } = useAuth();
@@ -59,6 +60,12 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
+
+      <Toaster toastOptions={{
+        duration: 2000,
+        position: "top-center"
+      }}/>
+
     </AuthProvider>
   );
 }
