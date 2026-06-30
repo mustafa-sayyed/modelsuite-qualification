@@ -12,6 +12,24 @@ const storage = multer.diskStorage({
     cb(null, unique + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage });
+
+const allowedFileMimeType = [
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+];
+
+const upload = multer({
+	storage,
+	fileFilter(req, file, cb) {
+		if (allowedFileMimeType.includes(file.mimetype)) {
+			cb(null, true);
+		} else {
+			cb(new Error(`File type ${file.mimetype} is not allowed, Only pdf and images are accepted`), false);
+		}
+	},
+});
+
 
 module.exports = upload;
