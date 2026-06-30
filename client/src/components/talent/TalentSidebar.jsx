@@ -87,7 +87,7 @@ const TalentSidebar = () => {
             onClick={() => { logout(); navigate('/login'); }}
             title="Sign out"
             className="logout-btn">
-            <IconLogout />
+            Logout
           </button>
         </div>
       </div>
