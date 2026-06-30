@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const talentRoutes = require('./routes/talentRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
 const path = require('path');
+const { MulterError } = require('multer');
 
 connectDB();
 
@@ -26,6 +27,17 @@ app.use('/api/submissions', submissionRoutes);
 
 // Health check
 app.get('/', (req, res) => res.send('Task Pipeline API is running...'));
+
+app.use((err, req, res, _next) => {
+  console.error('Error:', err);
+
+  const statusCode = err instanceof MulterError && err?.message?.includes('not allowed') ? 400 : 500;
+
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

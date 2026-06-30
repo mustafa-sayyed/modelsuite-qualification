@@ -9,5 +9,7 @@ module.exports = {
     sourceType: 'module',
   },
   extends: ['eslint:recommended'],
-  rules: {},
+  rules: {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+  },
 };
