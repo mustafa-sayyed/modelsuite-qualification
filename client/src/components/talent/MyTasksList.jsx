@@ -8,6 +8,8 @@ const STATUS_CLASS = {
   Submitted: 'status-badge-Submitted',
   Approved:  'status-badge-Approved',
   Rejected:  'status-badge-Rejected',
+  Overdue:   'status-badge-Rejected',
+  'Due Soon':'status-badge-Open',
 };
 
 /* ── Calendar icon ── */
@@ -33,6 +35,26 @@ const fmtDate = (raw) => {
     if (isNaN(d)) return raw;
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   } catch { return raw; }
+};
+
+const checkTaskDueStatus = (dueDate) => {
+	if (!dueDate) return "";
+
+	const now = new Date();
+	const taskDue = new Date(dueDate);
+
+	if (taskDue < now) {
+		return "Overdue";
+	}
+
+	const diffTime = taskDue - now;
+	const dueTime = diffTime / (1000 * 60 * 60 * 24);
+
+	if (dueTime <= 1) {
+		return "Due Soon";
+	}
+
+	return "";
 };
 
 const MyTasksList = ({ tasks, onRefresh }) => {
@@ -105,6 +127,15 @@ const MyTasksList = ({ tasks, onRefresh }) => {
                   {task.status === 'Submitted' ? 'Re-submit' : 'Submit'}
                 </button>
               )}
+
+              {checkTaskDueStatus(task.dueDate) && (
+								<span
+									className={`inline-block px-2.5 py-[3px] rounded-full text-[11px] font-medium ${STATUS_CLASS[checkTaskDueStatus(task.dueDate)]}`}
+									style={{ fontFamily: "Inter, sans-serif" }}
+								>
+									{checkTaskDueStatus(task.dueDate)}
+								</span>
+							)}
 
               {task.status ? (
                 <span
