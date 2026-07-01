@@ -20,13 +20,18 @@ const allowedFileMimeType = [
   'image/webp',
 ];
 
+const allowedExtension = [".pdf", ".jpg", ".jpeg", ".png", ".webp"]
+
 const upload = multer({
 	storage,
 	fileFilter(req, file, cb) {
-		if (allowedFileMimeType.includes(file.mimetype)) {
+    const extension = path.extname(file.originalname).toLocaleLowerCase();
+		if (allowedFileMimeType.includes(file.mimetype) && allowedExtension.includes(extension)) {
 			cb(null, true);
 		} else {
-			cb(new Error(`File type ${file.mimetype} is not allowed, Only pdf and images are accepted`), false);
+      const err = new Error(`File type ${file.mimetype} is not allowed, Only pdf and images are accepted`)
+      err.statusCode = 400;
+			cb(err, false);
 		}
 	},
 });

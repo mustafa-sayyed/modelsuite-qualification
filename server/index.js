@@ -31,7 +31,7 @@ app.get('/', (req, res) => res.send('Task Pipeline API is running...'));
 app.use((err, req, res, _next) => {
   console.error('Error:', err);
 
-  const statusCode = err instanceof MulterError && err?.message?.includes('not allowed') ? 400 : 500;
+  const statusCode = err.statusCode ?? (err instanceof MulterError && err?.message?.includes('not allowed')) ? 400 : 500;
 
   res.status(statusCode).json({
     success: false,

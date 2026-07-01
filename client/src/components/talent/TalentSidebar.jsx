@@ -33,15 +33,7 @@ const TalentSidebar = () => {
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refreshToken")
     try {
-			await API.post(
-				"/auth/logout",
-				{ refreshToken },
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-					},
-				},
-			);
+			await API.post("/auth/logout", { refreshToken },);
 
 			logout();
 			navigate("/login");

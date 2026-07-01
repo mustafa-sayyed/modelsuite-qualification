@@ -19,15 +19,17 @@ const registerUser = async (req, res) => {
 		const salt = await bcrypt.genSalt(8);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
-		const accessToken = generateToken(user._id, user.role);
-		const refreshToken = generateToken(user._id, user.role, "7d");
 		const user = await User.create({
-			name,
+      name,
 			email,
 			password: hashedPassword,
 			role,
-			refreshToken,
 		});
+    const accessToken = generateToken(user._id, user.role);
+    const refreshToken = generateToken(user._id, user.role, "7d");
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
 		res.status(201).json({
 			_id: user._id,
