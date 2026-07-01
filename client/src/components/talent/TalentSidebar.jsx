@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import API from '../../api/axios';
+import toast from 'react-hot-toast';
 
 /* ── Clean SVG line-art icons ── */
 const IconDashboard = () => (
@@ -34,6 +36,27 @@ const TalentSidebar = () => {
   const { user, logout } = useAuth();
   const navigate  = useNavigate();
   const location  = useLocation();
+
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refreshToken")
+    try {
+			await API.post(
+				"/auth/logout",
+				{ refreshToken },
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					},
+				},
+			);
+
+			logout();
+			navigate("/login");
+		} catch (error) {
+			console.log(error);
+			toast.error(error.response?.data?.message || "Logout failed");
+		}
+  }
 
   return (
     <aside className="fixed inset-y-0 left-0 w-[220px] flex flex-col z-50"
@@ -84,7 +107,7 @@ const TalentSidebar = () => {
           </div>
 
           <button
-            onClick={() => { logout(); navigate('/login'); }}
+            onClick={handleLogout}
             title="Sign out"
             className="logout-btn">
             Logout
